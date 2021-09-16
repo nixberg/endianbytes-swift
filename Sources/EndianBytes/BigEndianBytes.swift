@@ -32,14 +32,14 @@ where Integer: FixedWidthInteger & UnsignedInteger {
     }
     
     public subscript(position: Self.Index) -> Self.Element {
-        Self.Element(truncatingIfNeeded: bigEndianValue &>> (8 * position))
+        withUnsafeBytes(of: bigEndianValue) { $0[position] }
     }
         
     public var first: Self.Element {
-        Self.Element(truncatingIfNeeded: bigEndianValue)
+        withUnsafeBytes(of: bigEndianValue) { $0[startIndex] }
     }
     
     public var last: Self.Element {
-        Self.Element(truncatingIfNeeded: bigEndianValue >> (Integer.bitWidth - 8))
+        withUnsafeBytes(of: bigEndianValue) { $0[endIndex - 1] }
     }
 }
