@@ -7,6 +7,7 @@ where Integer: FixedWidthInteger & UnsignedInteger {
     private let bigEndianValue: Integer
     
     init(value: Integer) {
+        precondition(Integer.bitWidth.isMultiple(of: 8))
         bigEndianValue = value.bigEndian
     }
     
