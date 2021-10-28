@@ -24,11 +24,13 @@ where Integer: FixedWidthInteger & UnsignedInteger {
     }
     
     public func index(after i: Self.Index) -> Self.Index {
-        i + 1
+        assert((startIndex..<endIndex).contains(i))
+        return i + 1
     }
     
     public func index(before i: Self.Index) -> Self.Index {
-        i - 1
+        assert((startIndex..<endIndex).contains(i))
+        return i - 1
     }
     
     public subscript(position: Self.Index) -> Self.Element {
