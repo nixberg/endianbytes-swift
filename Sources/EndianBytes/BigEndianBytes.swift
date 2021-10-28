@@ -32,7 +32,8 @@ where Integer: FixedWidthInteger & UnsignedInteger {
     }
     
     public subscript(position: Self.Index) -> Self.Element {
-        withUnsafeBytes(of: bigEndianValue) { $0[position] }
+        precondition((startIndex..<endIndex).contains(position))
+        return withUnsafeBytes(of: bigEndianValue) { $0[position] }
     }
         
     public var first: Self.Element {
