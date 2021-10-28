@@ -4,11 +4,11 @@ where Integer: FixedWidthInteger & UnsignedInteger {
     
     public typealias Index = Int
     
-    private let littleEndianValue: Integer
+    private let value: Integer
     
     init(value: Integer) {
         precondition(Integer.bitWidth.isMultiple(of: 8))
-        littleEndianValue = value.littleEndian
+        self.value = value
     }
     
     public var count: Int {
@@ -35,14 +35,14 @@ where Integer: FixedWidthInteger & UnsignedInteger {
     
     public subscript(position: Self.Index) -> Self.Element {
         precondition((startIndex..<endIndex).contains(position))
-        return withUnsafeBytes(of: littleEndianValue) { $0[position] }
+        return UInt8(truncatingIfNeeded: value &>> (8 &* position))
     }
-        
+    
     public var first: Self.Element {
-        withUnsafeBytes(of: littleEndianValue) { $0[startIndex] }
+        UInt8(truncatingIfNeeded: value)
     }
     
     public var last: Self.Element {
-        withUnsafeBytes(of: littleEndianValue) { $0[endIndex - 1] }
+        UInt8(truncatingIfNeeded: value >> (Integer.bitWidth - 8))
     }
 }
