@@ -29,13 +29,13 @@ where Integer: FixedWidthInteger & UnsignedInteger {
     }
     
     public func index(before i: Self.Index) -> Self.Index {
-        assert((startIndex..<endIndex).contains(i))
+        assert(((startIndex + 1)..<endIndex).contains(i))
         return i - 1
     }
     
     public subscript(position: Self.Index) -> Self.Element {
         precondition((startIndex..<endIndex).contains(position))
-        return UInt8(truncatingIfNeeded: value &>> (8 &* position))
+        return UInt8(truncatingIfNeeded: value &>> (8 * position))
     }
     
     public var first: Self.Element {

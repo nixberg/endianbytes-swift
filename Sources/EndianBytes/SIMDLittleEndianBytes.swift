@@ -1,5 +1,5 @@
 public struct SIMDLittleEndianBytes<Vector>: RandomAccessCollection
-where Vector: SIMD, Vector.Scalar: FixedWidthInteger & UnsignedInteger {
+where Vector: SIMD, Vector.Scalar: FixedWidthInteger & EndianBytes {
     public typealias Element = UInt8
     
     public typealias Index = Int
@@ -29,7 +29,7 @@ where Vector: SIMD, Vector.Scalar: FixedWidthInteger & UnsignedInteger {
     }
     
     public func index(before i: Self.Index) -> Self.Index {
-        assert((startIndex..<endIndex).contains(i))
+        assert(((startIndex + 1)..<endIndex).contains(i))
         return i - 1
     }
     
@@ -47,7 +47,7 @@ where Vector: SIMD, Vector.Scalar: FixedWidthInteger & UnsignedInteger {
     }
 }
 
-fileprivate extension SIMD where Scalar: FixedWidthInteger & UnsignedInteger {
+fileprivate extension SIMD where Scalar: FixedWidthInteger {
     var littleEndian: Self {
         var result: Self = .zero
         for i in indices {
