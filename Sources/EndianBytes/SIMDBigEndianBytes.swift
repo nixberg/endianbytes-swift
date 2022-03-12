@@ -1,58 +1,42 @@
 public struct SIMDBigEndianBytes<Vector>: RandomAccessCollection
-where Vector: SIMD, Vector.Scalar: FixedWidthInteger & EndianBytes {
+where Vector: SIMD, Vector.Scalar: FixedWidthInteger & UnsignedInteger & EndianBytesProtocol {
     public typealias Element = UInt8
     
     public typealias Index = Int
     
-    private let bigEndianValue: Vector
+    private let value: Vector
     
-    init(value: Vector) {
+    init(_ value: Vector) {
         precondition(Vector.Scalar.bitWidth.isMultiple(of: 8))
-        bigEndianValue = value.bigEndian
+        self.value = value
     }
     
+    @inline(__always)
     public var count: Int {
         Vector.scalarCount * Vector.Scalar.bitWidth / 8
     }
     
+    @inline(__always)
     public var startIndex: Self.Index {
         0
     }
     
+    @inline(__always)
     public var endIndex: Self.Index {
         Vector.scalarCount * Vector.Scalar.bitWidth / 8
     }
     
-    public func index(after i: Self.Index) -> Self.Index {
-        assert((startIndex..<endIndex).contains(i))
-        return i + 1
-    }
-    
-    public func index(before i: Self.Index) -> Self.Index {
-        assert(((startIndex + 1)..<endIndex).contains(i))
-        return i - 1
-    }
-    
     public subscript(position: Self.Index) -> Self.Element {
         precondition((startIndex..<endIndex).contains(position))
-        return withUnsafeBytes(of: bigEndianValue) { $0[position] }
+        let (i, j) = position.quotientAndRemainder(dividingBy: Vector.Scalar.bitWidth / 8)
+        return .init(truncatingIfNeeded: value[i] &>> ((Vector.Scalar.bitWidth - 8) - (8 * j)))
     }
     
     public var first: Self.Element {
-        withUnsafeBytes(of: bigEndianValue) { $0[startIndex] }
+        .init(truncatingIfNeeded: value.first >> (Vector.Scalar.bitWidth - 8))
     }
     
     public var last: Self.Element {
-        withUnsafeBytes(of: bigEndianValue) { $0[endIndex - 1] }
-    }
-}
-
-fileprivate extension SIMD where Scalar: FixedWidthInteger {
-    var bigEndian: Self {
-        var result: Self = .zero
-        for i in indices {
-            result[i] = self[i].bigEndian
-        }
-        return result
+        .init(truncatingIfNeeded: value.last)
     }
 }
