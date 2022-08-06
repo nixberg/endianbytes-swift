@@ -1,5 +1,4 @@
-public struct BigEndianBytes<Integer>: RandomAccessCollection
-where Integer: FixedWidthInteger & UnsignedInteger {
+public struct BigEndianBytes<Integer>: RandomAccessCollection where Integer: FixedWidthInteger {
     public typealias Element = UInt8
     
     public typealias Index = Int
@@ -28,7 +27,7 @@ where Integer: FixedWidthInteger & UnsignedInteger {
     
     public subscript(position: Self.Index) -> Self.Element {
         precondition((startIndex..<endIndex).contains(position))
-        return .init(truncatingIfNeeded: value &>> ((Integer.bitWidth - 8) - (8 * position)))
+        return .init(truncatingIfNeeded: value >> ((Integer.bitWidth - 8) - (8 * position)))
     }
     
     public var first: Self.Element {

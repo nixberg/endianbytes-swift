@@ -1,5 +1,7 @@
+import EndianBytes
+
 public struct SIMDLittleEndianBytes<Vector>: RandomAccessCollection
-where Vector: SIMD, Vector.Scalar: FixedWidthInteger & UnsignedInteger & EndianBytesProtocol {
+where Vector: SIMD, Vector.Scalar: EndianBytesProtocol & FixedWidthInteger {
     public typealias Element = UInt8
     
     public typealias Index = Int
@@ -29,7 +31,7 @@ where Vector: SIMD, Vector.Scalar: FixedWidthInteger & UnsignedInteger & EndianB
     public subscript(position: Self.Index) -> Self.Element {
         precondition((startIndex..<endIndex).contains(position))
         let (i, j) = position.quotientAndRemainder(dividingBy: Vector.Scalar.bitWidth / 8)
-        return .init(truncatingIfNeeded: value[i] &>> (8 * j))
+        return .init(truncatingIfNeeded: value[i] >> (8 * j))
     }
     
     public var first: Self.Element {

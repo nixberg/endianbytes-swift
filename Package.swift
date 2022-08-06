@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 
 import PackageDescription
 
@@ -8,18 +8,21 @@ let package = Package(
         .library(
             name: "EndianBytes",
             targets: ["EndianBytes"]),
-    ],
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0"),
+        .library(
+            name: "SIMDEndianBytes",
+            targets: ["SIMDEndianBytes"]),
     ],
     targets: [
         .target(
-            name: "EndianBytes",
-            dependencies: [
-                .product(name: "Algorithms", package: "swift-algorithms"),
-            ]),
+            name: "EndianBytes"),
+        .target(
+            name: "SIMDEndianBytes",
+            dependencies: ["EndianBytes"]),
         .testTarget(
             name: "EndianBytesTests",
             dependencies: ["EndianBytes"]),
+        .testTarget(
+            name: "SIMDEndianBytesTests",
+            dependencies: ["SIMDEndianBytes"]),
     ]
 )

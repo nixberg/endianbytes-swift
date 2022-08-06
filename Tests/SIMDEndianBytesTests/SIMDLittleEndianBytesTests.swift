@@ -1,26 +1,28 @@
-import EndianBytes
+import SIMDEndianBytes
 import XCTest
 
 final class SIMDLittleEndianBytesTests: XCTestCase {
     func testSIMD2() {
-        testSIMDX(value: [0x0123, 0x4567] as SIMD2<UInt16>, bytes: [0x23, 0x01, 0x67, 0x45])
+        testVector(ofType: SIMD2<UInt16>.self, value: [0x0123, 0x4567], bytes: [
+            0x23, 0x01, 0x67, 0x45
+        ])
     }
     
     func testSIMD3() {
-        testSIMDX(value: [0x0123, 0x4567, 0x89ab] as SIMD3<UInt16>, bytes: [
+        testVector(ofType: SIMD3<UInt16>.self, value: [0x0123, 0x4567, 0x89ab], bytes: [
             0x23, 0x01, 0x67, 0x45, 0xab, 0x89
         ])
     }
     
     func testSIMD4() {
-        testSIMDX(value: [0x0123, 0x4567, 0x89ab, 0xcdef] as SIMD4<UInt16>, bytes: [
+        testVector(ofType: SIMD4<UInt16>.self, value: [0x0123, 0x4567, 0x89ab, 0xcdef], bytes: [
             0x23, 0x01, 0x67, 0x45, 0xab, 0x89, 0xef, 0xcd
         ])
     }
     
     func testRandomRoundtrip() throws {
         for _ in 0..<1024 {
-            let value: SIMD2 = .random(in: 0...UInt16.max)
+            let value: SIMD2 = .random(in: UInt16.min...UInt16.max)
             XCTAssertEqual(SIMD2(littleEndianBytes: value.littleEndianBytes()), value)
         }
         for _ in 0..<1024 {
@@ -32,7 +34,12 @@ final class SIMDLittleEndianBytesTests: XCTestCase {
     }
 }
 
-fileprivate func testSIMDX<T: TestedVector>(value: T, bytes: [UInt8], line: UInt = #line) {
+fileprivate func testVector<T>(
+    ofType type: T.Type,
+    value: T,
+    bytes: [UInt8],
+    line: UInt = #line
+) where T: SIMD, T.Scalar == UInt16 {
     XCTAssertEqual(value.littleEndianBytes().count, bytes.count, line: line)
     XCTAssertEqual(value.littleEndianBytes().startIndex, bytes.startIndex, line: line)
     XCTAssertEqual(value.littleEndianBytes().endIndex, bytes.endIndex, line: line)

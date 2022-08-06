@@ -1,19 +1,21 @@
-import EndianBytes
+import SIMDEndianBytes
 import XCTest
 
 final class SIMDBigEndianBytesTests: XCTestCase {
     func testSIMD2() {
-        testSIMDX(value: [0x0123, 0x4567] as SIMD2<UInt16>, bytes: [0x01, 0x23, 0x45, 0x67])
+        testVector(ofType: SIMD2<UInt16>.self, value: [0x0123, 0x4567], bytes: [
+            0x01, 0x23, 0x45, 0x67
+        ])
     }
     
     func testSIMD3() {
-        testSIMDX(value: [0x0123, 0x4567, 0x89ab] as SIMD3<UInt16>, bytes: [
+        testVector(ofType: SIMD3<UInt16>.self, value: [0x0123, 0x4567, 0x89ab], bytes: [
             0x01, 0x23, 0x45, 0x67, 0x89, 0xab
         ])
     }
     
     func testSIMD4() {
-        testSIMDX(value: [0x0123, 0x4567, 0x89ab, 0xcdef] as SIMD4<UInt16>, bytes: [
+        testVector(ofType: SIMD4<UInt16>.self, value: [0x0123, 0x4567, 0x89ab, 0xcdef], bytes: [
             0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef
         ])
     }
@@ -32,7 +34,12 @@ final class SIMDBigEndianBytesTests: XCTestCase {
     }
 }
 
-fileprivate func testSIMDX<T: TestedVector>(value: T, bytes: [UInt8], line: UInt = #line) {
+fileprivate func testVector<T>(
+    ofType type: T.Type,
+    value: T,
+    bytes: [UInt8],
+    line: UInt = #line
+) where T: SIMD, T.Scalar == UInt16 {
     XCTAssertEqual(value.bigEndianBytes().count, bytes.count, line: line)
     XCTAssertEqual(value.bigEndianBytes().startIndex, bytes.startIndex, line: line)
     XCTAssertEqual(value.bigEndianBytes().endIndex, bytes.endIndex, line: line)
