@@ -57,10 +57,12 @@ extension UInt8: EndianBytesProtocol {
     }
 }
 
+extension Int:   EndianBytesProtocol {}
 extension Int16: EndianBytesProtocol {}
 extension Int32: EndianBytesProtocol {}
 extension Int64: EndianBytesProtocol {}
 
+extension UInt:   EndianBytesProtocol {}
 extension UInt16: EndianBytesProtocol {}
 extension UInt32: EndianBytesProtocol {}
 extension UInt64: EndianBytesProtocol {}
