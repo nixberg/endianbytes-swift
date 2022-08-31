@@ -11,30 +11,25 @@ public struct LittleEndianBytes<Integer>: RandomAccessCollection where Integer: 
     }
     
     @inline(__always)
-    public var count: Int {
-        Integer.bitWidth / 8
-    }
-    
-    @inline(__always)
-    public var startIndex: Self.Index {
+    public var startIndex: Index {
         0
     }
     
     @inline(__always)
-    public var endIndex: Self.Index {
+    public var endIndex: Index {
         Integer.bitWidth / 8
     }
     
-    public subscript(position: Self.Index) -> Self.Element {
+    public subscript(position: Index) -> Element {
         precondition((startIndex..<endIndex).contains(position))
         return .init(truncatingIfNeeded: value >> (8 * position))
     }
     
-    public var first: Self.Element {
+    public var first: Element {
         .init(truncatingIfNeeded: value)
     }
     
-    public var last: Self.Element {
+    public var last: Element {
         .init(truncatingIfNeeded: value >> (Integer.bitWidth - 8))
     }
 }

@@ -19,11 +19,11 @@ extension FixedWidthInteger {
         self = Self(bigEndianBytes: bytes).byteSwapped
     }
     
-    public func bigEndianBytes() -> Self.BigEndianBytesSequence {
+    public func bigEndianBytes() -> BigEndianBytesSequence {
         .init(self)
     }
     
-    public func littleEndianBytes() -> Self.LittleEndianBytesSequence {
+    public func littleEndianBytes() -> LittleEndianBytesSequence {
         .init(self)
     }
 }
@@ -33,11 +33,11 @@ extension Int8: EndianBytesProtocol {
     
     public typealias LittleEndianBytesSequence = CollectionOfOne<UInt8>
     
-    public func bigEndianBytes() -> Self.BigEndianBytesSequence {
+    public func bigEndianBytes() -> BigEndianBytesSequence {
         .init(.init(bitPattern: self))
     }
     
-    public func littleEndianBytes() -> Self.LittleEndianBytesSequence {
+    public func littleEndianBytes() -> LittleEndianBytesSequence {
         .init(.init(bitPattern: self))
     }
 }
@@ -47,12 +47,12 @@ extension UInt8: EndianBytesProtocol {
     
     public typealias LittleEndianBytesSequence = CollectionOfOne<UInt8>
     
-    public func bigEndianBytes() -> Self.BigEndianBytesSequence {
+    public func bigEndianBytes() -> BigEndianBytesSequence {
         .init(self)
     }
     
     
-    public func littleEndianBytes() -> Self.LittleEndianBytesSequence {
+    public func littleEndianBytes() -> LittleEndianBytesSequence {
         .init(self)
     }
 }

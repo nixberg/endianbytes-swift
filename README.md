@@ -1,5 +1,6 @@
-[![Swift](https://github.com/nixberg/endianbytes-swift/actions/workflows/swift.yml/badge.svg)](https://github.com/nixberg/endianbytes-swift/actions/workflows/swift.yml)
+[![Swift](https://github.com/nixberg/endianbytes-swift/actions/workflows/swift.yml/badge.svg)](
+https://github.com/nixberg/endianbytes-swift/actions/workflows/swift.yml)
 
-# EndianBytes
+# endian-bytes
 
 A description of this package.

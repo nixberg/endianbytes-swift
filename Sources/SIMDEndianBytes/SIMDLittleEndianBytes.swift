@@ -14,31 +14,26 @@ where Vector: SIMD, Vector.Scalar: EndianBytesProtocol & FixedWidthInteger {
     }
     
     @inline(__always)
-    public var count: Int {
-        Vector.scalarCount * Vector.Scalar.bitWidth / 8
-    }
-    
-    @inline(__always)
-    public var startIndex: Self.Index {
+    public var startIndex: Index {
         0
     }
     
     @inline(__always)
-    public var endIndex: Self.Index {
+    public var endIndex: Index {
         Vector.scalarCount * Vector.Scalar.bitWidth / 8
     }
     
-    public subscript(position: Self.Index) -> Self.Element {
+    public subscript(position: Index) -> Element {
         precondition((startIndex..<endIndex).contains(position))
         let (i, j) = position.quotientAndRemainder(dividingBy: Vector.Scalar.bitWidth / 8)
         return .init(truncatingIfNeeded: value[i] >> (8 * j))
     }
     
-    public var first: Self.Element {
+    public var first: Element {
         .init(truncatingIfNeeded: value.first)
     }
     
-    public var last: Self.Element {
+    public var last: Element {
         .init(truncatingIfNeeded: value.last >> (Vector.Scalar.bitWidth - 8))
     }
 }

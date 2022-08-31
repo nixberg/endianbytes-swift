@@ -21,11 +21,11 @@ extension SIMD where Scalar: EndianBytesProtocol & FixedWidthInteger {
         self = Self(bigEndianBytes: bytes).byteSwapped
     }
     
-    public func bigEndianBytes() -> Self.BigEndianBytesSequence {
+    public func bigEndianBytes() -> BigEndianBytesSequence {
         .init(self)
     }
     
-    public func littleEndianBytes() -> Self.LittleEndianBytesSequence {
+    public func littleEndianBytes() -> LittleEndianBytesSequence {
         .init(self)
     }
 }
@@ -40,13 +40,13 @@ extension SIMD64: EndianBytesProtocol where Scalar: EndianBytesProtocol & FixedW
 
 extension SIMD {
     @inline(__always)
-    var first: Self.Scalar {
+    var first: Scalar {
         self[indices.startIndex]
     }
     
     @inline(__always)
-    var last: Self.Scalar {
-        self[indices.index(before: indices.endIndex)]
+    var last: Scalar {
+        self[indices.endIndex - 1]
     }
 }
 
