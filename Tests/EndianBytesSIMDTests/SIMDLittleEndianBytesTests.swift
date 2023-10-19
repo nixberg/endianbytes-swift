@@ -1,21 +1,17 @@
-import SIMDEndianBytes
+import EndianBytesSIMD
 import XCTest
 
 final class SIMDLittleEndianBytesTests: XCTestCase {
     func testSIMD2() {
-        testVector(ofType: SIMD2<UInt16>.self, value: [0x0123, 0x4567], bytes: [
-            0x23, 0x01, 0x67, 0x45
-        ])
+        testVector(SIMD2(0x0123, 0x4567), bytes: [0x23, 0x01, 0x67, 0x45])
     }
     
     func testSIMD3() {
-        testVector(ofType: SIMD3<UInt16>.self, value: [0x0123, 0x4567, 0x89ab], bytes: [
-            0x23, 0x01, 0x67, 0x45, 0xab, 0x89
-        ])
+        testVector(SIMD3(0x0123, 0x4567, 0x89ab), bytes: [0x23, 0x01, 0x67, 0x45, 0xab, 0x89])
     }
     
     func testSIMD4() {
-        testVector(ofType: SIMD4<UInt16>.self, value: [0x0123, 0x4567, 0x89ab, 0xcdef], bytes: [
+        testVector(SIMD4(0x0123, 0x4567, 0x89ab, 0xcdef), bytes: [
             0x23, 0x01, 0x67, 0x45, 0xab, 0x89, 0xef, 0xcd
         ])
     }
@@ -26,20 +22,14 @@ final class SIMDLittleEndianBytesTests: XCTestCase {
             XCTAssertEqual(SIMD2(littleEndianBytes: value.littleEndianBytes()), value)
         }
         for _ in 0..<1024 {
-            var rng = SystemRandomNumberGenerator()
-            let bytes: [UInt8] = (0..<4).map { _ in rng.next() }
+            let bytes: [UInt8] = .random(ofCount: 4)
             let vector: SIMD2<UInt16> = try XCTUnwrap(SIMD2(littleEndianBytes: bytes))
             XCTAssert(vector.littleEndianBytes().elementsEqual(bytes))
         }
     }
 }
 
-fileprivate func testVector<T>(
-    ofType type: T.Type,
-    value: T,
-    bytes: [UInt8],
-    line: UInt = #line
-) where T: SIMD, T.Scalar == UInt16 {
+fileprivate func testVector(_ value: some SIMD<UInt16>, bytes: [UInt8], line: UInt = #line) {
     XCTAssertEqual(value.littleEndianBytes().count, bytes.count, line: line)
     XCTAssertEqual(value.littleEndianBytes().startIndex, bytes.startIndex, line: line)
     XCTAssertEqual(value.littleEndianBytes().endIndex, bytes.endIndex, line: line)

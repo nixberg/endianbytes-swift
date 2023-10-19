@@ -1,13 +1,11 @@
 /// Conforming types support conversion from and to representations of their value as sequences of
 /// bytes in big-endian or little-endian byte order.
-public protocol EndianBytesProtocol {
+public protocol EndianBytesConvertible {
     /// A type representing a value as a sequence of bytes in big-endian byte order.
-    associatedtype BigEndianBytesSequence: Sequence
-    where BigEndianBytesSequence.Element == UInt8
+    associatedtype BigEndianBytesSequence: Sequence<UInt8>
     
     /// A type representing a value as a sequence of bytes in little-endian byte order.
-    associatedtype LittleEndianBytesSequence: Sequence
-    where LittleEndianBytesSequence.Element == UInt8
+    associatedtype LittleEndianBytesSequence: Sequence<UInt8>
     
     /// Creates a new instance of `Self` from a representation of a value as a sequence of
     /// bytes in big-endian byte order.
@@ -16,8 +14,8 @@ public protocol EndianBytesProtocol {
     /// consider omitted or superfluous bytes a `preconditionFailure`.
     ///
     /// - Parameters:
-    ///   - bytes: A sequence of bytes representing a value in big-endian byte order.
-    init<Bytes>(bigEndianBytes bytes: Bytes) where Bytes: Sequence, Bytes.Element == UInt8
+    ///   - bigEndianBytes: A sequence of bytes representing a value in big-endian byte order.
+    init(bigEndianBytes: some Sequence<UInt8>)
     
     /// Creates a new instance of `Self` from a representation of a value as a sequence of bytes
     /// in little-endian byte order.
@@ -26,8 +24,8 @@ public protocol EndianBytesProtocol {
     /// consider omitted or superfluous bytes a `preconditionFailure`.
     ///
     /// - Parameters:
-    ///   - bytes: A sequence of bytes representing a value in little-endian byte order.
-    init<Bytes>(littleEndianBytes bytes: Bytes) where Bytes: Sequence, Bytes.Element == UInt8
+    ///   - littleEndianBytes: A sequence of bytes representing a value in little-endian byte order.
+    init(littleEndianBytes: some Sequence<UInt8>)
     
     /// Returns a representation of `self` as a sequence of bytes in big-endian byte order.
     ///

@@ -1,4 +1,4 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.9
 
 import PackageDescription
 
@@ -7,22 +7,26 @@ let package = Package(
     products: [
         .library(
             name: "EndianBytes",
-            targets: ["EndianBytes"]),
-        .library(
-            name: "SIMDEndianBytes",
-            targets: ["SIMDEndianBytes"]),
+            targets: [
+                "EndianBytes",
+                "EndianBytesConvertible",
+                "EndianBytesSIMD",
+            ]),
     ],
     targets: [
         .target(
-            name: "EndianBytes"),
+            name: "EndianBytes",
+            dependencies: ["EndianBytesConvertible"]),
         .target(
-            name: "SIMDEndianBytes",
-            dependencies: ["EndianBytes"]),
+            name: "EndianBytesConvertible"),
+        .target(
+            name: "EndianBytesSIMD",
+            dependencies: ["EndianBytesConvertible"]),
         .testTarget(
             name: "EndianBytesTests",
             dependencies: ["EndianBytes"]),
         .testTarget(
-            name: "SIMDEndianBytesTests",
-            dependencies: ["SIMDEndianBytes"]),
+            name: "EndianBytesSIMDTests",
+            dependencies: ["EndianBytesSIMD"]),
     ]
 )
